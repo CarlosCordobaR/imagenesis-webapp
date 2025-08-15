@@ -1,14 +1,13 @@
 services:
   - type: web
     name: imagenesis-webapp
-    env: python
+    env: docker
     region: frankfurt
     plan: free
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: gunicorn app:application -c gunicorn.conf.py
+    buildCommand: ""
+    startCommand: ""
+    dockerfilePath: ./Dockerfile
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.4
       - key: PORT
-        generateValue: true
+        value: 10000
     healthCheckPath: /
