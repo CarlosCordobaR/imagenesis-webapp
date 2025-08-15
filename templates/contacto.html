@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto - {{ content.site_info.name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="page-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">{{ content.contacto.title }}</h1>
+                <p class="lead">{{ content.contacto.subtitle }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Información de contacto -->
+<section class="contact-info py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ content.contacto.info.address.title }}</h5>
+                    <p class="text-muted">{{ content.contacto.info.address.value }}</p>
+                    <a href="https://maps.google.com/?q={{ content.contacto.info.address.value }}" 
+                       class="btn btn-outline-primary" target="_blank">
+                        <i class="fas fa-directions me-2"></i>Ver en Mapa
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ content.contacto.info.phone.title }}</h5>
+                    <p class="text-muted">{{ content.contacto.info.phone.value }}</p>
+                    <a href="tel:{{ content.contacto.info.phone.value }}" class="btn btn-outline-primary">
+                        <i class="fas fa-phone me-2"></i>Llamar Ahora
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ content.contacto.info.whatsapp.title }}</h5>
+                    <p class="text-muted">{{ content.contacto.info.whatsapp.value }}</p>
+                    <a href="https://wa.me/{{ content.contacto.info.whatsapp.value.replace('+', '').replace(' ', '') }}" 
+                       class="btn btn-success" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ content.contacto.info.email.title }}</h5>
+                    <p class="text-muted">{{ content.contacto.info.email.value }}</p>
+                    <a href="mailto:{{ content.contacto.info.email.value }}" class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i>Enviar Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Formulario de contacto y horarios -->
+<section class="contact-form py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="form-container bg-white rounded shadow p-4">
+                    <h3 class="mb-4">Envíanos un Mensaje</h3>
+                    
+                    <form id="contactForm" data-validate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="contactName" class="form-label">Nombre Completo *</label>
+                                <input type="text" class="form-control" id="contactName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="contactEmail" class="form-label">Correo Electrónico *</label>
+                                <input type="email" class="form-control" id="contactEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="contactPhone" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="contactPhone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="contactSubject" class="form-label">Asunto *</label>
+                                <select class="form-control" id="contactSubject" required>
+                                    <option value="">Selecciona un asunto...</option>
+                                    <option value="informacion">Información General</option>
+                                    <option value="cita">Agendar Cita</option>
+                                    <option value="resultados">Consulta de Resultados</option>
+                                    <option value="precios">Información de Precios</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="contactMessage" class="form-label">Mensaje *</label>
+                            <textarea class="form-control" id="contactMessage" rows="5" required 
+                                      placeholder="Escribe tu mensaje aquí..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="contactConsent" required>
+                                <label class="form-check-label" for="contactConsent">
+                                    Acepto el tratamiento de mis datos personales según la 
+                                    <a href="#" class="text-primary">política de privacidad</a> *
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Horarios -->
+                <div class="schedule-container bg-white rounded shadow p-4 mb-4">
+                    <h4 class="mb-4">{{ content.contacto.hours.title }}</h4>
+                    <div class="schedule-table">
+                        {% for schedule in content.contacto.hours.schedule %}
+                        <div class="schedule-row d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <strong>{{ schedule.day }}</strong>
+                            <span class="text-muted">{{ schedule.hours }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Redes sociales -->
+                <div class="social-container bg-white rounded shadow p-4">
+                    <h4 class="mb-4">Síguenos en Redes</h4>
+                    <div class="social-links">
+                        {% for social in content.contacto.social_media %}
+                        <a href="{{ social.url }}" class="social-link d-flex align-items-center mb-3 p-2 rounded" target="_blank">
+                            <span class="social-icon me-3">{{ social.icon }}</span>
+                            <span>{{ social.platform }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mapa (placeholder) -->
+<section class="map-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Nuestra Ubicación</h3>
+                <div class="map-container bg-light rounded p-5 text-center">
+                    <i class="fas fa-map-marked-alt display-4 text-primary mb-3"></i>
+                    <h5>{{ content.contacto.info.address.value }}</h5>
+                    <p class="text-muted">Bogotá, Colombia</p>
+                    <a href="https://maps.google.com/?q={{ content.contacto.info.address.value }}" 
+                       class="btn btn-primary" target="_blank">
+                        <i class="fas fa-directions me-2"></i>Obtener Direcciones
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Información adicional -->
+<section class="additional-info py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Atención de Emergencias</h5>
+                    <p class="text-muted">Disponible 24/7 para casos urgentes</p>
+                    <a href="tel:{{ content.site_info.phone }}" class="btn btn-danger">
+                        <i class="fas fa-phone me-2"></i>Emergencias
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-parking"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Estacionamiento</h5>
+                    <p class="text-muted">Parqueadero gratuito disponible para pacientes</p>
+                    <small class="text-success">Incluido en el servicio</small>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-wheelchair"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Accesibilidad</h5>
+                    <p class="text-muted">Instalaciones completamente accesibles</p>
+                    <small class="text-info">Rampa y ascensor disponibles</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Recopilar datos del formulario
+        const formData = new FormData(contactForm);
+        const contactData = Object.fromEntries(formData.entries());
+        
+        // Mostrar loading
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Enviando...';
+        submitBtn.disabled = true;
+        
+        // Simular envío
+        setTimeout(function() {
+            // Mostrar mensaje de éxito
+            ImagenesisApp.showToast('¡Mensaje enviado exitosamente! Te contactaremos pronto.', 'success');
+            
+            // Restaurar botón
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            // Limpiar formulario
+            contactForm.reset();
+            
+            // Limpiar clases de validación
+            contactForm.classList.remove('was-validated');
+            contactForm.querySelectorAll('.is-valid, .is-invalid').forEach(field => {
+                field.classList.remove('is-valid', 'is-invalid');
+            });
+        }, 2000);
+    });
+});
+</script>
+
+<style>
+.social-link {
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.social-link:hover {
+    background-color: var(--light-color);
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.social-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.schedule-row:last-child {
+    border-bottom: none !important;
+}
+
+.map-container {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .contact-info .col-md-6 {
+        margin-bottom: 2rem;
+    }
+}
+</style>
+{% endblock %}

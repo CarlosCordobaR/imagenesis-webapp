@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}{{ content.abc_radiologia.title }} - {{ content.site_info.name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="page-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">{{ content.abc_radiologia.title }}</h1>
+                <p class="lead">{{ content.abc_radiologia.subtitle }}</p>
+                <p class="mb-0">{{ content.abc_radiologia.intro }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Secciones educativas -->
+<section class="educational-sections py-5">
+    <div class="container">
+        <div class="row">
+            {% for section in content.abc_radiologia.sections %}
+            <div class="col-lg-6 mb-4">
+                <div class="info-card">
+                    <div class="d-flex align-items-start">
+                        <div class="section-icon me-3">
+                            <span class="display-6">{{ section.icon }}</span>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-primary mb-3">{{ section.title }}</h4>
+                            <p class="text-muted">{{ section.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Preguntas frecuentes -->
+<section class="faq py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Preguntas Frecuentes</h2>
+                <p class="lead text-muted">Resolvemos las dudas más comunes sobre nuestros estudios radiológicos</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    {% for faq in content.abc_radiologia.faqs %}
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="heading{{ loop.index }}">
+                            <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" 
+                                    type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse{{ loop.index }}" 
+                                    aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" 
+                                    aria-controls="collapse{{ loop.index }}">
+                                <strong>{{ faq.question }}</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" 
+                             class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
+                             aria-labelledby="heading{{ loop.index }}" 
+                             data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p class="text-muted mb-0">{{ faq.answer }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Preparación para estudios -->
+<section class="preparation-guide py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Guía de Preparación</h2>
+                <p class="lead text-muted">Instrucciones generales para prepararte adecuadamente para tu estudio</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="preparation-card text-center p-4 bg-white rounded shadow">
+                    <div class="prep-icon mb-3">
+                        <i class="fas fa-utensils display-4 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Ayuno</h5>
+                    <p class="text-muted">Para estudios abdominales o con contraste, se requiere ayuno de 6-8 horas. Solo agua está permitida.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="preparation-card text-center p-4 bg-white rounded shadow">
+                    <div class="prep-icon mb-3">
+                        <i class="fas fa-tshirt display-4 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Vestimenta</h5>
+                    <p class="text-muted">Usa ropa cómoda sin metales (botones, cremalleras). Podrás necesitar cambiarte a una bata hospitalaria.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="preparation-card text-center p-4 bg-white rounded shadow">
+                    <div class="prep-icon mb-3">
+                        <i class="fas fa-file-medical display-4 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Documentos</h5>
+                    <p class="text-muted">Trae tu documento de identidad, orden médica y estudios previos si los tienes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tipos de estudios -->
+<section class="study-types py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Tipos de Estudios Radiológicos</h2>
+                <p class="lead text-muted">Conoce las diferentes modalidades diagnósticas que ofrecemos</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for category in content.servicios.categories[:4] %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="study-type-card text-center p-4 bg-white rounded shadow h-100">
+                    <div class="study-icon mb-3">
+                        <span class="display-4">{{ category.icon }}</span>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ category.name }}</h5>
+                    <ul class="list-unstyled text-muted">
+                        {% for service in category.services[:2] %}
+                        <li class="mb-1">• {{ service.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('servicios') }}" class="btn btn-outline-primary btn-sm mt-3">
+                        Ver Detalles
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Seguridad radiológica -->
+<section class="safety-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">Seguridad Radiológica</h2>
+                <p class="lead mb-4">Tu seguridad es nuestra prioridad. Conoce las medidas que tomamos:</p>
+                
+                <div class="safety-features">
+                    <div class="safety-item d-flex align-items-center mb-3">
+                        <div class="safety-icon me-3">
+                            <i class="fas fa-shield-alt text-success"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Dosis Mínima Necesaria</h6>
+                            <small class="text-muted">Utilizamos la menor dosis de radiación posible para obtener imágenes de calidad diagnóstica</small>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-item d-flex align-items-center mb-3">
+                        <div class="safety-icon me-3">
+                            <i class="fas fa-cogs text-success"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Equipos Calibrados</h6>
+                            <small class="text-muted">Mantenimiento preventivo regular y calibración constante de todos nuestros equipos</small>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-item d-flex align-items-center mb-3">
+                        <div class="safety-icon me-3">
+                            <i class="fas fa-user-shield text-success"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Protección Personalizada</h6>
+                            <small class="text-muted">Evaluamos cada caso individualmente para maximizar beneficios y minimizar riesgos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="/static/images/safety-equipment.jpg" alt="Equipos de seguridad" 
+                     class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">¿Tienes Más Preguntas?</h2>
+                <p class="lead mb-4">Nuestro equipo médico está disponible para resolver todas tus dudas sobre estudios radiológicos</p>
+                
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('contacto') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-comments me-2"></i>Consultar Especialista
+                    </a>
+                    <a href="{{ url_for('reserva_cita') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-calendar-alt me-2"></i>Agendar Estudio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.section-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.preparation-card,
+.study-type-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.preparation-card:hover,
+.study-type-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.safety-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}{{ content.site_info.name }} - Inicio{% endblock %}
+
+{% block content %}
+<!-- Hero Section con colores profesionales del logo -->
+<section class="hero-section text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 fade-in">{{ content.inicio.hero.title }}</h1>
+                <h2 class="h4 text-light mb-4 fade-in">
+                    <span class="tagline-highlight text-logo-accent">{{ content.site_info.tagline }}</span>
+                </h2>
+                <p class="lead mb-4 fade-in">{{ content.inicio.hero.description }}</p>
+                
+                <div class="d-flex gap-3 flex-wrap fade-in">
+                    <a href="{{ url_for('reserva_cita') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-calendar-alt me-2"></i>{{ content.inicio.hero.cta_primary }}
+                    </a>
+                    <a href="{{ url_for('servicios') }}" class="btn btn-outline-light btn-lg">
+                        {{ content.inicio.hero.cta_secondary }}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center fade-in">
+                <div class="position-relative">
+                    <img src="{{ content.inicio.hero.image_url }}" alt="Centro médico Imagénesis" 
+                         class="img-fluid rounded shadow-lg" style="max-height: 400px;">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 rounded" 
+                         style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(8, 145, 178, 0.1)); pointer-events: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Estadísticas con colores profesionales -->
+<section class="stats-section py-5 bg-logo-light">
+    <div class="container">
+        <div class="row text-center">
+            {% for stat in content.inicio.stats %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card h-100 p-4 fade-in">
+                    <div class="icon-primary mb-3 mx-auto" style="width: 60px; height: 60px;">
+                        <i class="fas fa-chart-line fs-4"></i>
+                    </div>
+                    <h3 class="display-5 fw-bold text-logo-primary">{{ stat.number }}</h3>
+                    <p class="text-muted mb-0">{{ stat.label }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Características principales -->
+<section class="features-section py-5 section-overlay">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto fade-in">
+                <h2 class="display-5 fw-bold mb-4 text-logo-primary">¿Por Qué Elegir Imagénesis?</h2>
+                <p class="lead text-muted">Combinamos lo mejor de la tecnología médica con un enfoque humano y personalizado</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for feature in content.inicio.features %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card text-center p-4 bg-white rounded shadow-sm h-100">
+                    <div class="feature-icon mb-3">
+                        <span class="display-4">{{ feature.icon }}</span>
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ feature.title }}</h5>
+                    <p class="text-muted">{{ feature.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Servicios destacados -->
+<section class="services-preview py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">Nuestros Servicios Principales</h2>
+                <p class="lead mb-4">Ofrecemos una amplia gama de estudios diagnósticos con la más alta tecnología</p>
+                
+                <div class="services-list">
+                    {% for category in content.servicios.categories[:4] %}
+                    <div class="service-item d-flex align-items-center mb-3">
+                        <span class="service-icon me-3">{{ category.icon }}</span>
+                        <div>
+                            <h6 class="fw-bold mb-1">{{ category.name }}</h6>
+                            <small class="text-muted">{{ category.services|length }} procedimientos disponibles</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <a href="{{ url_for('servicios') }}" class="btn btn-primary btn-lg">
+                    Ver Todos los Servicios <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="services-visual p-4">
+                    <img src="/static/images/device.jpg" alt="Equipos médicos avanzados" 
+                         class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonios -->
+<section class="testimonials-section py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Lo Que Dicen Nuestros Pacientes</h2>
+                <p class="lead text-muted">La satisfacción de nuestros pacientes es nuestra mayor recompensa</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for testimonial in content.inicio.testimonials %}
+            <div class="col-lg-6 mb-4">
+                <div class="testimonial-card bg-white p-4 rounded shadow-sm h-100">
+                    <div class="stars mb-3">
+                        {% for i in range(testimonial.rating) %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% endfor %}
+                    </div>
+                    <blockquote class="mb-3">
+                        <p class="text-muted">"{{ testimonial.text }}"</p>
+                    </blockquote>
+                    <cite class="fw-bold">- {{ testimonial.name }}</cite>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action final -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">¿Listo para Cuidar tu Salud?</h2>
+                <p class="lead mb-4">Agenda tu cita hoy mismo y accede a diagnósticos precisos con atención personalizada</p>
+                
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('reserva_cita') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-calendar-alt me-2"></i>Reservar Cita
+                    </a>
+                    <a href="tel:{{ content.site_info.phone }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Llamar Ahora
+                    </a>
+                </div>
+                
+                <div class="contact-info mt-4">
+                    <p class="mb-1">
+                        <i class="fas fa-phone me-2"></i>{{ content.site_info.phone }}
+                    </p>
+                    <p class="mb-0">
+                        <i class="fab fa-whatsapp me-2"></i>{{ content.site_info.whatsapp }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Contacto -->
+<section class="contact-section py-5 bg-logo-subtle">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto fade-in">
+                <h2 class="display-6 fw-bold mb-4 text-logo-primary">Contáctanos</h2>
+                <p class="lead text-muted">¿Tienes preguntas? Estamos aquí para ayudarte</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="service-card h-100 p-4 text-center fade-in">
+                    <div class="icon-primary mb-3 mx-auto" style="width: 60px; height: 60px;">
+                        <i class="fas fa-map-marker-alt fs-4"></i>
+                    </div>
+                    <h5 class="text-logo-primary mb-3">{{ content.contacto.info.address.title }}</h5>
+                    <p class="text-muted mb-0">{{ content.contacto.info.address.value }}</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="service-card h-100 p-4 text-center fade-in">
+                    <div class="icon-primary mb-3 mx-auto" style="width: 60px; height: 60px;">
+                        <i class="fas fa-phone fs-4"></i>
+                    </div>
+                    <h5 class="text-logo-primary mb-3">{{ content.contacto.info.phone.title }}</h5>
+                    <p class="text-muted mb-0">
+                        <a href="tel:{{ content.contacto.info.phone.value }}" class="text-decoration-none">
+                            {{ content.contacto.info.phone.value }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="service-card h-100 p-4 text-center fade-in">
+                    <div class="icon-primary mb-3 mx-auto" style="width: 60px; height: 60px;">
+                        <i class="fab fa-whatsapp fs-4"></i>
+                    </div>
+                    <h5 class="text-logo-primary mb-3">{{ content.contacto.info.whatsapp.title }}</h5>
+                    <p class="text-muted mb-0">
+                        <a href="https://wa.me/{{ content.contacto.info.whatsapp.value.replace(' ', '').replace('(', '').replace(')', '').replace('-', '') }}" 
+                           class="text-decoration-none" target="_blank">
+                            {{ content.contacto.info.whatsapp.value }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="service-card h-100 p-4 text-center fade-in">
+                    <div class="icon-primary mb-3 mx-auto" style="width: 60px; height: 60px;">
+                        <i class="fas fa-envelope fs-4"></i>
+                    </div>
+                    <h5 class="text-logo-primary mb-3">{{ content.contacto.info.email.title }}</h5>
+                    <p class="text-muted mb-0">
+                        <a href="mailto:{{ content.contacto.info.email.value }}" class="text-decoration-none">
+                            {{ content.contacto.info.email.value }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Horarios de atención -->
+        <div class="row mt-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="service-card p-4 text-center fade-in">
+                    <h5 class="text-logo-primary mb-4">{{ content.contacto.hours.title }}</h5>
+                    <div class="row">
+                        {% for schedule in content.contacto.hours.schedule %}
+                        <div class="col-md-6 mb-2">
+                            <div class="d-flex justify-content-between schedule-item">
+                                <span class="fw-semibold">{{ schedule.day }}:</span>
+                                <span class="text-logo-accent">{{ schedule.hours }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botón de acción para página de contacto completa -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('contacto') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-map-marked-alt me-2"></i>Ver Ubicación y Más Detalles
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Animaciones suaves al hacer scroll
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador animado para estadísticas
+    const counters = document.querySelectorAll('.stat-card h3');
+    
+    const animateCounter = (counter) => {
+        const target = parseInt(counter.innerText.replace(/[^\d]/g, ''));
+        const increment = target / 100;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                counter.innerText = counter.innerText.replace(/\d+/, target);
+                clearInterval(timer);
+            } else {
+                counter.innerText = counter.innerText.replace(/\d+/, Math.floor(current));
+            }
+        }, 20);
+    };
+    
+    // Observer para activar animaciones cuando son visibles
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target.querySelector('h3');
+                if (counter && !counter.hasAttribute('data-animated')) {
+                    counter.setAttribute('data-animated', 'true');
+                    animateCounter(counter);
+                }
+            }
+        });
+    });
+    
+    document.querySelectorAll('.stat-card').forEach(card => {
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

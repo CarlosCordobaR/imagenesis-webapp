@@ -1,0 +1,40 @@
+<svg width="280" height="280" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5fb3d3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4a90a4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ecf8fd;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="140" cy="140" r="140" fill="url(#backgroundGradient)"/>
+  
+  <!-- Inner circle for photo area -->
+  <circle cx="140" cy="140" r="120" fill="url(#circleGradient)" stroke="#f39c12" stroke-width="3"/>
+  
+  <!-- Professional icon -->
+  <circle cx="140" cy="120" r="35" fill="#34495e" opacity="0.7"/>
+  
+  <!-- Body/shoulders representation -->
+  <ellipse cx="140" cy="180" rx="45" ry="25" fill="#34495e" opacity="0.7"/>
+  
+  <!-- Stethoscope icon -->
+  <path d="M120 140 Q130 150 140 140 Q150 150 160 140" stroke="#f39c12" stroke-width="3" fill="none"/>
+  <circle cx="125" cy="145" r="4" fill="#f39c12"/>
+  <circle cx="155" cy="145" r="4" fill="#f39c12"/>
+  
+  <!-- Text -->
+  <text x="140" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#34495e">
+    Dra. Sandra Córdoba
+  </text>
+  <text x="140" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4a90a4">
+    Radiodiagnóstico
+  </text>
+  <text x="140" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#4a90a4">
+    Jefa de Área Clínica
+  </text>
+</svg>

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Servicios - {{ content.site_info.name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="page-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">{{ content.servicios.intro.title }}</h1>
+                <p class="lead">{{ content.servicios.intro.subtitle }}</p>
+                <p class="mb-0">{{ content.servicios.intro.description }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categorías de Servicios -->
+<section class="services-categories py-5">
+    <div class="container">
+        {% for category in content.servicios.categories %}
+        <div class="service-category mb-5 p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-2 text-center">
+                    <div class="service-icon mx-auto mb-3">
+                        <span class="display-4">{{ category.icon }}</span>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <h3 class="fw-bold mb-4">{{ category.name }}</h3>
+                    <div class="row">
+                        {% for service in category.services %}
+                        <div class="col-md-6 mb-3">
+                            <div class="service-item border rounded p-3 h-100">
+                                <h5 class="fw-bold text-primary">{{ service.name }}</h5>
+                                <p class="text-muted mb-2">{{ service.description }}</p>
+                                <small class="text-success">
+                                    <i class="fas fa-clock me-1"></i>Duración: {{ service.duration }}
+                                </small><br>
+                                <small class="text-info">
+                                    <i class="fas fa-info-circle me-1"></i>{{ service.preparation }}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Programas Especiales -->
+<section class="special-programs py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Programas Preventivos Especiales</h2>
+                <p class="lead text-muted">Paquetes diseñados para el cuidado integral de tu salud</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for program in content.servicios.special_programs %}
+            <div class="col-lg-6 mb-4">
+                <div class="info-card">
+                    <h4 class="fw-bold text-primary mb-3">{{ program.name }}</h4>
+                    <p class="mb-3">{{ program.description }}</p>
+                    
+                    <h6 class="fw-bold">Incluye:</h6>
+                    <ul class="service-list">
+                        {% for item in program.includes %}
+                        <li><i class="fas fa-check text-success me-2"></i>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <p class="text-muted mt-3">
+                        <i class="fas fa-users me-2"></i><strong>Dirigido a:</strong> {{ program.target }}
+                    </p>
+                    
+                    <a href="{{ url_for('reserva_cita') }}" class="btn btn-primary">
+                        <i class="fas fa-calendar-alt me-2"></i>Agendar Programa
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">¿Necesitas Más Información?</h2>
+                <p class="lead mb-4">Nuestro equipo médico está disponible para resolver todas tus dudas</p>
+                
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('contacto') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Contactar Ahora
+                    </a>
+                    <a href="{{ url_for('abc_radiologia') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-book me-2"></i>Guía de Estudios
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

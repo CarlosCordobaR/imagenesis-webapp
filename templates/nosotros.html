@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Nosotros - {{ content.site_info.name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="page-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">Conoce a Imagénesis</h1>
+                <p class="lead">Nuestra historia, valores y el equipo comprometido con tu salud</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Misión y Visión -->
+<section class="mission-vision py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">{{ content.nosotros.mission.title }}</h3>
+                    <p class="text-muted">{{ content.nosotros.mission.text }}</p>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="info-card text-center">
+                    <div class="contact-icon mx-auto">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">{{ content.nosotros.vision.title }}</h3>
+                    <p class="text-muted">{{ content.nosotros.vision.text }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Valores -->
+<section class="values py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Nuestros Valores</h2>
+                <p class="lead text-muted">Los principios que guían cada una de nuestras acciones</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for value in content.nosotros.core_values %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card text-center">
+                    <h5 class="fw-bold text-primary mb-3">{{ value.title }}</h5>
+                    <p class="text-muted">{{ value.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Fundadora -->
+<section class="founder py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center mb-4">
+                <img src="{{ content.nosotros.founder.image_url }}" alt="{{ content.nosotros.founder.name }}" 
+                     class="img-fluid rounded-circle shadow-lg" style="max-width: 280px; border: 4px solid var(--gold-accent);">
+                <div class="mt-3">
+                    <span class="badge bg-primary fs-6">{{ content.nosotros.founder.experience_years }} años de experiencia</span>
+                </div>
+                <div class="mt-2">
+                    <span class="badge bg-success fs-6">👑 Jefa de Área Clínica</span>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-3">{{ content.nosotros.founder.name }}</h2>
+                <h4 class="text-primary mb-2">{{ content.nosotros.founder.title }}</h4>
+                <h5 class="text-success mb-4">
+                    <i class="fas fa-hospital text-success me-2"></i>{{ content.nosotros.founder.current_position }}
+                </h5>
+                
+                <p class="lead mb-4">{{ content.nosotros.founder.bio }}</p>
+                
+                <!-- Especializaciones -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">🎯 Especializaciones:</h5>
+                        <ul class="list-unstyled">
+                            {% for specialization in content.nosotros.founder.specializations %}
+                            <li class="mb-2">
+                                <i class="fas fa-microscope text-primary me-2"></i>{{ specialization }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">🌍 Experiencia Internacional:</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-flag text-primary me-2"></i>España: {{ content.nosotros.founder.international_experience.spain }}
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-flag text-primary me-2"></i>Reino Unido: {{ content.nosotros.founder.international_experience.uk }}
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-flag text-primary me-2"></i>Colombia: {{ content.nosotros.founder.international_experience.colombia }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Logros destacados -->
+                <div class="achievements-section mb-4">
+                    <h5 class="fw-bold mb-3">🏆 Logros Destacados:</h5>
+                    <div class="row">
+                        {% for achievement in content.nosotros.founder.achievements %}
+                        <div class="col-md-6 mb-2">
+                            <div class="achievement-item d-flex align-items-center">
+                                <i class="fas fa-star text-warning me-2"></i>
+                                <small class="text-muted">{{ achievement }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <h5 class="fw-bold mb-3">🎓 Formación Académica:</h5>
+                <ul class="list-unstyled">
+                    {% for credential in content.nosotros.founder.credentials %}
+                    <li class="mb-2">
+                        <i class="fas fa-graduation-cap text-primary me-2"></i>{{ credential }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Equipo -->
+<section class="team py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Nuestro Equipo</h2>
+                <p class="lead text-muted">Profesionales comprometidos con la excelencia en diagnóstico médico</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for member in content.nosotros.team %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-card text-center bg-white rounded shadow p-4">
+                    <div class="team-avatar mx-auto mb-3">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h5 class="fw-bold">{{ member.name }}</h5>
+                    <p class="text-primary mb-2">{{ member.position }}</p>
+                    <p class="text-muted small">{{ member.specialization }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">¿Quieres Conocer Más?</h2>
+                <p class="lead mb-4">Estamos aquí para responder todas tus preguntas y brindarte la atención que mereces</p>
+                
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('contacto') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Contáctanos
+                    </a>
+                    <a href="{{ url_for('reserva_cita') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-calendar-alt me-2"></i>Agenda tu Cita
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.team-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+}
+
+.team-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+</style>
+{% endblock %}

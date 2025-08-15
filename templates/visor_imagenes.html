@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block title %}Visor de Imágenes Médicas - {{ content.site_info.name }}{% endblock %}
+
+{% block head %}
+<style>
+    .image-viewer-container {
+        height: calc(100vh - 120px);
+        overflow: hidden;
+    }
+    
+    .image-panel {
+        height: 100%;
+        border-right: 1px solid var(--border-color);
+        background: var(--background-light);
+        transition: all 0.3s ease;
+    }
+    
+    .chat-panel {
+        height: 100%;
+        background: var(--background-light);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+    
+    .image-display {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .image-display img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .image-display.zoomed img {
+        transform: scale(1.5);
+        cursor: zoom-out;
+    }
+    
+    .upload-area {
+        border: 2px dashed var(--primary-color);
+        border-radius: 12px;
+        padding: 60px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: rgba(143, 172, 139, 0.05);
+    }
+    
+    .upload-area:hover {
+        border-color: var(--accent-color);
+        background: rgba(143, 172, 139, 0.1);
+    }
+    
+    .upload-area.dragover {
+        border-color: var(--accent-color);
+        background: rgba(196, 165, 114, 0.1);
+        transform: scale(1.02);
+    }
+    
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: var(--background-medical);
+    }
+    
+    .message {
+        margin-bottom: 15px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        max-width: 85%;
+        word-wrap: break-word;
+    }
+    
+    .message.user {
+        background: var(--primary-color);
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+    }
+    
+    .message.assistant {
+        background: white;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-bottom-left-radius: 4px;
+    }
+    
+    .chat-input-container {
+        padding: 20px;
+        border-top: 1px solid var(--border-color);
+        background: white;
+    }
+    
+    .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .image-controls {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+    
+    .progress-bar {
+        height: 4px;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
+    
+    /* Tema Oscuro */
+    .dark-theme {
+        --background-light: #1a1a1a;
+        --background-medical: #2d2d2d;
+        --text-color: #e0e0e0;
+        --border-color: #404040;
+    }
+    
+    .dark-theme .image-panel,
+    .dark-theme .chat-panel {
+        background: var(--background-light);
+        color: var(--text-color);
+    }
+    
+    .dark-theme .chat-messages {
+        background: var(--background-medical);
+    }
+    
+    .dark-theme .message.assistant {
+        background: #3a3a3a;
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+    
+    .dark-theme .chat-input-container {
+        background: #2d2d2d;
+        border-color: var(--border-color);
+    }
+    
+    .dark-theme .upload-area {
+        background: rgba(143, 172, 139, 0.1);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+    }
+    
+    .typing-indicator {
+        display: none;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 12px;
+        border-bottom-left-radius: 4px;
+        max-width: 85%;
+        border: 1px solid var(--border-color);
+    }
+    
+    .typing-dots {
+        display: flex;
+        gap: 4px;
+    }
+    
+    .typing-dots span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        animation: typing 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+        0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+    
+    .dark-theme .typing-indicator {
+        background: #3a3a3a;
+        border-color: var(--border-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 pt-3">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h1 class="h3 fw-bold text-logo-primary">
+                <i class="fas fa-eye me-2"></i>Visor de Imágenes Médicas
+            </h1>
+            <p class="text-muted">Sube y analiza imágenes médicas con asistencia de IA</p>
+        </div>
+    </div>
+    
+    <div class="row image-viewer-container">
+        <!-- Panel de Imagen -->
+        <div class="col-lg-8 p-0">
+            <div class="image-panel position-relative">
+                <!-- Controles de Imagen -->
+                <div class="image-controls">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="zoomBtn" title="Zoom">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="downloadBtn" title="Descargar" disabled>
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="fullscreenBtn" title="Pantalla completa">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Toggle de Tema -->
+                <div class="theme-toggle">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                
+                <!-- Área de Imagen -->
+                <div class="image-display" id="imageDisplay">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-logo-primary mb-3"></i>
+                        <h4 class="fw-bold text-logo-primary">Arrastra tu imagen aquí</h4>
+                        <p class="text-muted mb-3">o haz clic para seleccionar</p>
+                        <div class="small text-muted">
+                            Formatos: JPG, PNG, DICOM, TIFF (máx. 100MB)
+                        </div>
+                        <input type="file" id="fileInput" class="d-none" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp,.dcm,.dicom" multiple>
+                    </div>
+                </div>
+                
+                <!-- Barra de Progreso -->
+                <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: rgba(0,0,0,0.1);">
+                    <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel de Chat -->
+        <div class="col-lg-4 p-0">
+            <div class="chat-panel">
+                <!-- Mensajes del Chat -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-robot text-logo-primary me-2"></i>
+                            <strong>Asistente IA</strong>
+                            <small class="text-muted ms-auto">Ahora</small>
+                        </div>
+                        ¡Hola! Soy tu asistente para análisis de imágenes médicas. Sube una imagen y pregúntame lo que necesites saber sobre ella.
+                    </div>
+                </div>
+                
+                <!-- Indicador de escritura -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-robot text-logo-primary me-2"></i>
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <small class="text-muted ms-2">Analizando...</small>
+                    </div>
+                </div>
+                
+                <!-- Input del Chat -->
+                <div class="chat-input-container">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="chatInput" 
+                               placeholder="Escribe tu pregunta sobre la imagen..." disabled>
+                        <button class="btn btn-primary" type="button" id="sendBtn" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="small text-muted mt-2">
+                        Ejemplos: "¿Qué observas en esta imagen?", "Describe los hallazgos", "¿Hay alguna anomalía?"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const zoomBtn = document.getElementById('zoomBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const progressBar = document.getElementById('progressBar');
+    const typingIndicator = document.getElementById('typingIndicator');
+    
+    let currentImagePath = '';
+    let isZoomed = false;
+    let isDarkTheme = false;
+    
+    // Evento para el área de carga
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileUpload(files[0]);
+        }
+    });
+    
+    // Selección de archivo
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileUpload(e.target.files[0]);
+        }
+    });
+    
+    // Subida de archivo
+    function handleFileUpload(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Mostrar progreso
+        progressBar.style.width = '0%';
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                progressBar.style.width = percentComplete + '%';
+            }
+        });
+        
+        xhr.addEventListener('load', function() {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    displayImage(response.filepath, response.filename);
+                    currentImagePath = response.filepath;
+                    enableChat();
+                    addMessage('assistant', `Imagen "${response.filename}" cargada exitosamente. ¿Qué te gustaría saber sobre ella?`);
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            } else {
+                alert('Error al subir la imagen');
+            }
+            progressBar.style.width = '0%';
+        });
+        
+        xhr.open('POST', '/api/upload-image');
+        xhr.send(formData);
+    }
+    
+    // Mostrar imagen
+    function displayImage(imagePath, filename) {
+        imageDisplay.innerHTML = `
+            <img src="${imagePath}" alt="${filename}" id="displayedImage">
+        `;
+        
+        const img = document.getElementById('displayedImage');
+        img.addEventListener('click', toggleZoom);
+        
+        downloadBtn.disabled = false;
+        downloadBtn.addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = imagePath;
+            a.download = filename;
+            a.click();
+        });
+    }
+    
+    // Zoom
+    function toggleZoom() {
+        isZoomed = !isZoomed;
+        imageDisplay.classList.toggle('zoomed', isZoomed);
+        zoomBtn.innerHTML = isZoomed ? '<i class="fas fa-search-minus"></i>' : '<i class="fas fa-search-plus"></i>';
+    }
+    
+    zoomBtn.addEventListener('click', toggleZoom);
+    
+    // Pantalla completa
+    fullscreenBtn.addEventListener('click', () => {
+        if (imageDisplay.requestFullscreen) {
+            imageDisplay.requestFullscreen();
+        }
+    });
+    
+    // Tema oscuro/claro
+    themeToggle.addEventListener('click', () => {
+        isDarkTheme = !isDarkTheme;
+        document.body.classList.toggle('dark-theme', isDarkTheme);
+        themeToggle.innerHTML = isDarkTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    });
+    
+    // Habilitar chat
+    function enableChat() {
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+    }
+    
+    // Enviar mensaje
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message || !currentImagePath) return;
+        
+        addMessage('user', message);
+        chatInput.value = '';
+        
+        // Mostrar indicador de escritura
+        typingIndicator.style.display = 'block';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Enviar al backend
+        fetch('/api/analyze-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                image_path: currentImagePath
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            typingIndicator.style.display = 'none';
+            if (data.success) {
+                addMessage('assistant', data.response);
+            } else {
+                addMessage('assistant', 'Lo siento, hubo un error al procesar tu consulta.');
+            }
+        })
+        .catch(error => {
+            typingIndicator.style.display = 'none';
+            addMessage('assistant', 'Error de conexión. Por favor, intenta nuevamente.');
+        });
+    }
+    
+    // Añadir mensaje al chat
+    function addMessage(sender, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const now = new Date();
+        const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        
+        if (sender === 'assistant') {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-robot text-logo-primary me-2"></i>
+                    <strong>Asistente IA</strong>
+                    <small class="text-muted ms-auto">${time}</small>
+                </div>
+                ${text}
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <strong>Tú</strong>
+                    <small class="text-muted ms-auto">${time}</small>
+                </div>
+                ${text}
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+});
+</script>
+{% endblock %}
