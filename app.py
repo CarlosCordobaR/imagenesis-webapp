@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Aplicación principal para Imagénesis - Centro de Diagnóstico por Imágenes
+Configurada para despliegue en Render.com
+"""
 
 import os
 from WeabAppIMG import app
