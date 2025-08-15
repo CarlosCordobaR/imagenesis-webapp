@@ -1,4 +1,7 @@
 #!/bin/bash
 set -o errexit
-pip install --upgrade pip==21.3.1
+echo "==> Upgrading pip..."
+python -m pip install --upgrade pip
+echo "==> Installing dependencies..."
 pip install -r requirements.txt
+echo "==> Build completed successfully!"

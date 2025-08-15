@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: imagenesis-webapp
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn app:application -c gunicorn.conf.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.4
+      - key: PORT
+        generateValue: true
+    healthCheckPath: /
