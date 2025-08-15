@@ -562,6 +562,7 @@ def analyze_image_llm():
         'timestamp': datetime.now().strftime('%H:%M:%S')
     })
 
+# Esta parte solo se ejecuta en desarrollo local
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5001))
     debug = os.environ.get("FLASK_ENV") != "production"
